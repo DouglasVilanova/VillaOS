@@ -1,0 +1,13 @@
+{
+  "cliente": "exemplo",
+  "nome": "Nome do Cliente",
+  "status": "desenvolvimento",
+  "modulos": ["painel"],
+  "auth": "env-hmac",
+  "tracking": [],
+  "local": null,
+  "dominio": "",
+  "preview": "",
+  "repo": "",
+  "animacao": "medio"
+}
