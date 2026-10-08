@@ -1,0 +1,28 @@
+{
+  "company": "Nome da Empresa",
+  "location": "Cidade / Estado",
+  "author": "Nome do Autor",
+  "authorUrl": "https://www.instagram.com/perfil/",
+  "siteRepo": "C:/caminho/do/repo-do-site",
+  "siteUrl": "https://www.exemplo.com.br",
+  "localUrl": "http://localhost:3000",
+  "apiPath": "/api/blog/posts",
+  "secretEnvFile": ".env.local",
+  "secretEnvVar": "BLOG_API_SECRET",
+  "imagePublicDir": "public/images/blog",
+  "imageUrlPrefix": "/images/blog",
+  "imageModel": "gpt_image_2_5",
+  "imageResolution": "2k",
+  "brandStyle": "Estilo: ilustração digital editorial, moderna e limpa, fundo escuro, acentos na cor da marca, alta definição, sem logotipos de marcas reais, sem marcas d'água.",
+  "services": [
+    { "name": "Serviço 1", "url": "/servico-1" }
+  ],
+  "ctas": {
+    "form": "/contato",
+    "whatsapp": "https://wa.me/55DDDNUMERO"
+  },
+  "categories": {
+    "exemplo": "Exemplo"
+  },
+  "publicCases": ["Cliente A (o que foi entregue)"]
+}
