@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* Tokens do cliente. /novo-site e /design-cliente substituem os valores pelo design-system.md. */
+@theme {
+  --color-fundo: #ffffff;
+  --color-texto: #16161a;
+  --color-suave: #f3f2ee;
+  --color-destaque: #d9480f;
+  --color-destaque-texto: #ffffff;
+  --font-sans: var(--font-sans-next), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-next, var(--font-sans-next)), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-fundo);
+  color: var(--color-texto);
+  font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
