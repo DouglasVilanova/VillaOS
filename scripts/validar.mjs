@@ -8,7 +8,7 @@ const raiz = fileURLToPath(new URL("..", import.meta.url));
 const erros = [];
 
 function frontmatter(texto) {
-  texto = texto.replace(/^﻿/, ""); // editores do Windows gravam BOM
+  texto = texto.replace(/^\uFEFF/, ""); // editores do Windows gravam BOM
   const m = texto.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!m) return null;
   const campos = {};
