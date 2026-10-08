@@ -134,11 +134,6 @@ skill `/seguranca` tem uma variante `vercel.json` só para eles.
 
 ### 3.4 Roteamento e orquestração
 
-Inspirado no `intelligent-routing` e no `orchestrator` do ag-kit (vudovn/ag-kit, presente
-em `clientes/4tentos/.agent/`), adaptado ao Claude Code. O ag-kit não é importado: foi
-feito para o Google Antigravity, cobre domínios fora do escopo (games, mobile) e seu
-roteamento "sempre ativo" conflitaria com o superpowers.
-
 **Tabela de roteamento** no `CLAUDE.md` raiz, cobrindo marketing e sites. Cada linha:
 intenção (palavras em português) → skill → agentes. Exemplos:
 
@@ -174,7 +169,7 @@ subagente, então a coordenação precisa rodar na conversa principal. Workflow:
 2. Quebrar a demanda em partes e mapear cada parte para uma linha da tabela.
 3. Se a demanda cria funcionalidade nova, chamar `superpowers:brainstorming`.
 4. Se envolve mais de uma skill, chamar `superpowers:writing-plans`; sem plano aprovado,
-   não executa (checkpoint herdado do ag-kit).
+   não executa.
 5. Executar na ordem do plano. Passos que dependem de skill com interação (briefing,
    aprovação de diff, escolha de modo) rodam na conversa principal. Tarefas de código
    independentes podem ir para subagentes via `superpowers:subagent-driven-development`;
@@ -435,10 +430,9 @@ corporativo, bold, local/confiança) e gera `clientes/<x>/design-system.md` a pa
 `template-design-system.md`: paleta, tipografia, formas, z-index, tokens Tailwind 4
 (`@theme`), nível de animação, o que nunca fazer.
 
-`estilos.md` inclui uma versão condensada (até ~150 linhas) de princípios de psicologia
-UX e da tabela anti-clichê do `frontend-design` do ag-kit (bento grid genérico, hero
-dividido previsível, glassmorphism por padrão, copy "empoderar/orquestrar"), reescrita com
-texto próprio e citando a fonte; conferir a licença do ag-kit antes.
+`estilos.md` inclui princípios de psicologia UX (até ~150 linhas) e uma tabela anti-clichê
+(bento grid genérico, hero dividido previsível, glassmorphism por padrão, copy
+"empoderar/orquestrar").
 
 **Camada de execução:** ao construir ou redesenhar páginas, `novo-site`, `painel-gestao`,
 `blog` e `animacoes` usam a skill `frontend-design:frontend-design` (plugin oficial
@@ -446,10 +440,8 @@ Anthropic; se não estiver instalado, a skill avisa e segue só com `design-syst
 `estilos.md`) com a instrução explícita
 de obedecer `design-system.md`: tokens, fontes e nível de animação do cliente são fixos;
 a liberdade criativa vale para composição e detalhes. Isso evita que cada página do mesmo
-cliente saia com estética diferente. Comparação feita no brainstorming: `frontend-design`
-tem o melhor gosto de execução mas não persiste decisões e incentiva variar a cada
-geração; o do ag-kit tem bons princípios mas ~3.700 linhas e é genérico; nenhum dos dois
-substitui o `design-system.md` por cliente.
+cliente saia com estética diferente: a skill de execução não persiste decisões e tende a
+variar a cada geração; o `design-system.md` por cliente é o que mantém a consistência.
 
 ### 7.10 `/animacoes`
 Núcleo no kit (seção 8) + `catalogo-externo.md` com componentes curados de React Bits e
@@ -597,8 +589,8 @@ até lá, catálogos seguem o padrão blass manualmente.
 | Chatbot | roteiro fixo → WhatsApp | IA via API |
 | Prévias | repo do cliente desde a proposta | páginas dentro do site da agência |
 | Agentes | 3 auditores que não editam código | agentes que editam |
-| Orquestração | skill `/orquestrar` + tabela de roteamento, usando superpowers para brainstorm/plano | importar ag-kit; orquestrador como agente (subagente não chama skill) |
-| Design | `design-cliente` (estratégia, persiste) + `frontend-design` (execução, travada no design-system) | só `frontend-design`; `frontend-design` do ag-kit |
+| Orquestração | skill `/orquestrar` + tabela de roteamento, usando superpowers para brainstorm/plano | orquestrador como agente (subagente não chama skill) |
+| Design | `design-cliente` (estratégia, persiste) + `frontend-design` (execução, travada no design-system) | só a skill de execução, sem design-system por cliente |
 | Local dos clientes | `clientes/` dentro do workspace (ignorada no git) | pasta fora do workspace |
 | Rate limit | Postgres via RPC quando há Supabase | memória (não vale entre instâncias), Upstash (serviço extra) |
 | Hospedagem | todo site do kit é app Next na Vercel | export estático (perderia `proxy.ts`) |
