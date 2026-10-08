@@ -25,7 +25,7 @@ Ler `site.json` (precisa ter `painel`), `KIT.md` e `design-system.md` do cliente
 2. `lib/defaults.ts`: valor padrão (do briefing ou placeholder).
 3. Componente em `components/sections/`: usar o campo.
 4. Página do bloco em `app/gestao/(protected)/blocos/<secao>/page.tsx`: acrescentar em `campos`.
-5. `npm test` (o teste de defaults pega tipo errado) e `npm run build`.
+5. `npm run typecheck` (o tipo `SiteSettings` pega campo faltando ou errado), `npm test` e `npm run build`.
 
 ## Nova seção editável
 

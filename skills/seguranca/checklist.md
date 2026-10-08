@@ -14,7 +14,7 @@ Severidades: **crítico** (bloqueia `online`), **alto**, **médio**, **baixo**.
 | ID | Sev. | Aplica | Verificar | Corrigir |
 |---|---|---|---|---|
 | SEG-01 | crítico | sempre | `git ls-files` sem `.env*` (exceto `.env.example`); `git log --all --diff-filter=A --name-only` sem `.env`; `gitleaks detect --no-banner` só se `gitleaks` já estiver instalado (não instalar) | remover do índice, rotacionar a chave vazada, adicionar ao `.gitignore` |
-| SEG-02 | crítico | sempre | `SUPABASE_SERVICE_ROLE_KEY` e `SESSION_SECRET` nunca com prefixo `NEXT_PUBLIC_`; grep `service_role` só em `lib/supabase/admin.ts` | renomear env; mover uso para módulo com `import "server-only"` |
+| SEG-02 | crítico | sempre | `SUPABASE_SERVICE_ROLE_KEY` e `SESSION_SECRET` nunca com prefixo `NEXT_PUBLIC_`; `SUPABASE_SERVICE_ROLE_KEY` lido só em `lib/supabase/admin.ts` e `lib/env.ts` (presença) | renomear env; mover uso para módulo com `import "server-only"` |
 | SEG-03 | alto | sempre | `npm audit --omit=dev` sem `critical`/`high` | `npm audit fix`; atualizar pacote |
 
 ## Autenticação e painel
@@ -25,9 +25,9 @@ Severidades: **crítico** (bloqueia `online`), **alto**, **médio**, **baixo**.
 | SEG-11 | crítico | `painel` | rotas em `app/api/**/route.ts` que escrevem checam `getAdmin()` e devolvem 401 | idem |
 | SEG-12 | crítico | `supabase-admin` | `getAdmin`/proxy exigem `app_metadata.role === "admin"`, não só usuário logado | padrão de `lib/auth/supabase-admin.ts` |
 | SEG-13 | alto | `supabase-admin` | signup desligado no projeto Supabase (Authentication → Providers → Email) | desligar "Allow new users to sign up" |
-| SEG-14 | alto | `painel` | login com rate limit (5 por 15 min por IP e 20 por 15 min por conta) | `rateLimit` em `signIn` |
+| SEG-14 | alto | `painel` | login com rate limit (5 por 15 min por IP+e-mail e 20 por 15 min por conta) | `rateLimit` em `signIn` |
 | SEG-15 | alto | `painel` | rate limit usa Postgres (`hit_rate_limit`) quando há Supabase; em memória só sem banco | `lib/rate-limit.ts` do kit + `003_rpc.sql` |
-| SEG-16 | médio | `painel` | cookie de sessão `httpOnly`, `secure` em produção, `sameSite=lax` | opções do `cookies().set` |
+| SEG-16 | médio | `env-hmac` | cookie de sessão `httpOnly`, `secure` em produção, `sameSite=lax` (em `supabase-admin` os cookies são do `@supabase/ssr`, padrão da lib) | opções do `cookies().set` |
 | SEG-17 | médio | `supabase-admin` | troca de senha valida política (≥10, maiúscula, minúscula, número) e senha atual | `changePassword` do kit |
 
 ## Banco (Supabase)
@@ -44,7 +44,7 @@ Severidades: **crítico** (bloqueia `online`), **alto**, **médio**, **baixo**.
 
 | ID | Sev. | Aplica | Verificar | Corrigir |
 |---|---|---|---|---|
-| SEG-30 | alto | sempre | headers: CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors`; `poweredByHeader: false` (`curl -sI` ou `next.config`) | `next.config.ts` do kit |
+| SEG-30 | alto | sempre | headers: CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors`; `poweredByHeader: false` (`curl.exe -sI` ou `next.config`) | `next.config.ts` do kit |
 | SEG-31 | alto | sempre | perfil de CSP coerente com o manifesto (`lib/manifest.ts → cspProfile`) | ajustar `site.json` ou `lib/csp.ts` |
 | SEG-32 | alto | sempre | JSON-LD escapa `<` (`components/JsonLd.tsx`) | usar o componente do kit |
 | SEG-33 | alto | `painel` | upload valida MIME (sem SVG) e tamanho no servidor | `lib/upload-rules.ts` + `lib/upload.ts` |
@@ -56,8 +56,8 @@ Severidades: **crítico** (bloqueia `online`), **alto**, **médio**, **baixo**.
 
 | ID | Sev. | Aplica | Verificar | Corrigir |
 |---|---|---|---|---|
-| SEG-40 | crítico | `status: proposta` | gate de preview ativo: `PREVIEW_PASSWORD` e `PREVIEW_SECRET` definidos na Vercel; `curl -sI <preview>/` → 307 para `/preview` | definir envs e redeploy |
-| SEG-41 | crítico | `status: online` | site sem `noindex`: `curl -sI` da home sem `x-robots-tag`; `robots.txt` sem linha exatamente igual a `Disallow: /` (`Disallow: /gestao` é esperado) | `status` no `site.json` + redeploy |
+| SEG-40 | crítico | `status: proposta` | gate de preview ativo: `PREVIEW_PASSWORD` e `PREVIEW_SECRET` definidos na Vercel; `curl.exe -sI <preview>/` → 307 para `/preview` | definir envs e redeploy |
+| SEG-41 | crítico | `status: online` | site sem `noindex`: `curl.exe -sI` da home sem `x-robots-tag`; `robots.txt` sem linha exatamente igual a `Disallow: /` (`Disallow: /gestao` é esperado) | `status` no `site.json` + redeploy |
 | SEG-42 | alto | `status` ≠ `online` | `x-robots-tag: noindex` presente | `proxy.ts` do kit |
 | SEG-43 | médio | `painel` | `robots.txt` bloqueia `/gestao` e `/api` quando online | `app/robots.ts` |
 

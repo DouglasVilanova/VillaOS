@@ -33,7 +33,7 @@ Os modos completo e proposta param se `clientes/<slug>/` já existir (sugerir `-
 ## Pré-requisitos (checar antes de tudo)
 
 ```powershell
-node -v                      # v22+
+node -v                      # v22.12+
 gh --version; gh auth status # logado como villadigitalmail-create
 vercel whoami                # villadigitalmail-7623 (conta Villa Digital na Vercel; no GitHub é villadigitalmail-create)
 ```
@@ -66,7 +66,8 @@ Pasta dos clientes: `clientes/` na raiz do workspace (conferir no `CLAUDE.md` da
 7. `site.json`: `status: "proposta"`, `modulos: []`, `auth: "nenhum"`, demais campos do briefing.
    Gravar sem BOM: `[IO.File]::WriteAllText("<caminho absoluto>\site.json", $json)`.
 8. Conteúdo: preencher `lib/defaults.ts` com as respostas; tokens do design em `app/globals.css`
-   (`@theme`) e fontes em `app/layout.tsx` (`next/font/google`).
+   (`@theme`) e fontes em `app/layout.tsx` (`next/font/google`, usando as variáveis
+   `--font-sans-next` e `--font-display-next`; o `@theme` lê essas).
 9. Layout: ajustar `components/sections/*` usando `frontend-design:frontend-design` com a
    instrução de obedecer `design-system.md`. Sem a skill instalada, avisar e seguir só com o
    design-system.
@@ -112,6 +113,7 @@ Pasta dos clientes: `clientes/` na raiz do workspace (conferir no `CLAUDE.md` da
    robocopy "$k\supabase" "$d\supabase" /E /NFL /NDL /NJH /NJS /NP
    Copy-Item "$k\lib\proxy\admin.ts" "$d\lib\proxy\admin.ts"
    Copy-Item "$k\lib\settings-write.ts", "$k\lib\upload.ts" "$d\lib\"
+   Copy-Item "$k\tests\admin-gate.test.ts" "$d\tests\"
    Copy-Item "$k\proxy.ts" "$d\proxy.ts" -Force
    ```
    Sem `painel`, pular este passo.
@@ -179,7 +181,7 @@ O pipe do PowerShell pode acrescentar quebra de linha ao valor; senha com `\r\n`
 confere. Depois de adicionar:
 ```powershell
 vercel env pull .env.vercel --environment=production --yes
-Compare-Object (Get-Content .env.local | Where-Object { $_ -match '=' } | Sort-Object) (Get-Content .env.vercel | Where-Object { $_ -match '^[A-Z_]+=' } | ForEach-Object { $_ -replace '"', '' } | Sort-Object)
+Compare-Object (Get-Content .env.local | Where-Object { $_ -match '^[A-Z_]+=.+' } | Sort-Object) (Get-Content .env.vercel | Where-Object { $_ -match '^[A-Z_]+=' } | ForEach-Object { $_ -replace '"', '' } | Sort-Object)
 Remove-Item .env.vercel
 ```
 Diferença em alguma variável → corrigir no dashboard da Vercel (Settings → Environment Variables), sem espaço nem quebra no fim.
@@ -195,8 +197,8 @@ O CNAME `*` de `villadigital.com.br` → `cname.vercel-dns.com` já existe (conf
 
 ## Erros comuns
 
-- Build falha com tipo em `lib/auth`: os dois arquivos do modo não usado ainda existem e o
-  `index.ts` aponta para o errado. Conferir com a tabela do `KIT.md`.
+- Build falha com tipo em `lib/auth`: `lib/auth/index.ts` ou `lib/auth/proxy.ts` aponta para um
+  arquivo apagado ou para modos diferentes. Conferir com a tabela do `KIT.md`.
 - Deploy "commit author doesn't have permission": o autor do commit não é o da Villa Digital.
   Corrigir `git config` e `git commit --amend --reset-author`.
 - Painel não salva: falta `SUPABASE_SERVICE_ROLE_KEY` na Vercel ou não houve redeploy depois de criar a env.

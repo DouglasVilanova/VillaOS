@@ -64,5 +64,5 @@ Escrita no banco sempre pelo servidor com `service_role`.
 | "Banco não configurado neste ambiente." | faltam envs do Supabase (supabase-admin) |
 | "E-mail ou senha inválidos." com dados certos | env criada sem redeploy; espaço no fim do valor da env |
 | "Este usuário não tem permissão de administrador." | falta `role: admin` no `app_metadata` |
-| "Muitas tentativas." | rate limit (5 em 15 min por IP, 20 em 15 min por conta): esperar o tempo indicado ou limpar a linha em `public.rate_limits` |
+| "Muitas tentativas." | rate limit (5 em 15 min por IP+e-mail e 20 em 15 min por conta): esperar o tempo indicado ou limpar a linha em `public.rate_limits` |
 | loga e volta para o login | cookie não grava: domínio diferente entre preview e produção, ou `SESSION_SECRET`, `ADMIN_EMAIL` ou `ADMIN_PASSWORD` mudou (a sessão antiga deixa de valer) |

@@ -12,7 +12,7 @@ export default function SegurancaPage() {
           <ol className="list-decimal space-y-1 pl-5">
             <li>Vercel → projeto → Settings → Environment Variables.</li>
             <li>Editar ADMIN_PASSWORD (mínimo 10 caracteres, com maiúscula, minúscula e número).</li>
-            <li>Fazer redeploy. Para derrubar sessões abertas, trocar também SESSION_SECRET.</li>
+            <li>Fazer redeploy. A troca encerra as sessões abertas.</li>
           </ol>
         </div>
       ) : (

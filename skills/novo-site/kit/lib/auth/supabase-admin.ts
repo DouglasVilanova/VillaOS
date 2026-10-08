@@ -8,7 +8,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 import type { Resultado } from "@/lib/resultado";
 import { createClient } from "@/lib/supabase/server";
-import { EMAIL_MAX, LOGIN_JANELA_MS, LOGIN_LIMITE } from "./constants";
+import { EMAIL_MAX, LOGIN_JANELA_MS, LOGIN_LIMITE, LOGIN_LIMITE_CONTA } from "./constants";
 import type { AdminSession } from "./types";
 
 export const AUTH_MODE = "supabase-admin";
@@ -33,7 +33,9 @@ export async function signIn(email: string, senha: string): Promise<Resultado> {
   if (!hasSupabase()) return { ok: false, erro: "Banco não configurado neste ambiente." };
   const normal = email.trim().toLowerCase().slice(0, EMAIL_MAX);
   const rl = await rateLimit(`login:${await clientIp()}:${normal}`, LOGIN_LIMITE, LOGIN_JANELA_MS);
-  if (!rl.ok) return { ok: false, erro: `Muitas tentativas. Tente de novo em ${Math.ceil(rl.retryAfterMs / 60000)} min.` };
+  const rlConta = await rateLimit(`login:acct:${normal}`, LOGIN_LIMITE_CONTA, LOGIN_JANELA_MS);
+  const bloqueio = !rl.ok ? rl : !rlConta.ok ? rlConta : null;
+  if (bloqueio) return { ok: false, erro: `Muitas tentativas. Tente de novo em ${Math.ceil(bloqueio.retryAfterMs / 60000)} min.` };
 
   const sb = await createClient();
   const { data, error } = await sb.auth.signInWithPassword({ email: normal, password: senha });

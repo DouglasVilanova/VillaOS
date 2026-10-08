@@ -39,10 +39,10 @@ Trocar as duas linhas e apagar os arquivos do modo não usado:
 
 ## Modo proposta (só LP)
 
-Saem só os itens abaixo; todo o resto fica (inclui `tests/`, configs, `site.json`, `KIT.md`).
+Saem só os itens abaixo; todo o resto fica (inclui `tests/`, exceto `tests/admin-gate.test.ts`, configs, `site.json`, `KIT.md`).
 
 Saem: `app/gestao/`, `app/api/`, `lib/auth/`, `lib/proxy/admin.ts`, `lib/settings-write.ts`,
-`lib/upload.ts`, `components/gestao/`, `supabase/`.
+`lib/upload.ts`, `components/gestao/`, `supabase/`, `tests/admin-gate.test.ts`.
 
 `proxy.ts` ← `variantes/proxy.proposta.ts`. A pasta `variantes/` é apagada em todos os modos,
 depois de aplicadas as regras (a variante volta a ser copiada de `<kit>/variantes/` quando preciso).

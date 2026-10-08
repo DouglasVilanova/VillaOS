@@ -18,7 +18,7 @@ o kit emite `noindex` sozinho, e isso é esperado.
 
 | Item | Onde | Regra |
 |---|---|---|
-| title | `metadata.title` ou `generateMetadata` | 50–60 caracteres, termo principal no início; template `%s | Nome` vem do layout |
+| title | `metadata.title` ou `generateMetadata` | 50–60 caracteres, termo principal no início; template `%s \| Nome` vem do layout |
 | description | `metadata.description` | 150–160 caracteres, com chamada para ação |
 | canonical | `alternates: { canonical: "/caminho" }` | relativo; `metadataBase` vem do layout |
 | H1 | componente | exatamente um por página |
