@@ -68,6 +68,12 @@ recorte circular.
 Mix que funcionou: 01 quem somos · 02 serviços · 03 case → educativos com dado (do blog) alternando
 com cases e 2 Reels (bastidores + demonstração).
 
+**Cases (regra):** todo case leva o **logo do cliente** (`.logo-card`), o **print real do site no
+celular** (`.shot`) e um slide **"veja ao vivo"** com o endereço do site do cliente (`.live`), além de
+"🔗 Veja ao vivo: <site>" na legenda (no Facebook vira link clicável). Prova real convence mais que
+descrição. Fonte típica: portfólio do site da agência (logos, prints mobile, URLs). Logo de cliente
+pode vir como foto/símbolo — confira cada um numa prancha antes de usar.
+
 ## Passo 5 — Renderizar
 
 Uma pasta por post em `marketing/conteudo/post-NN-<slug>-<data>/` com `slides.html` (só os
@@ -133,6 +139,12 @@ grave no `.env` junto com `META_PUBLIC_SITE_URL`. Copie `scripts/meta-post.mjs` 
 O script junta linhas quebradas da legenda (o `.md` tem quebras por largura que virariam quebras
 no post) e mantém parágrafos, listas com emoji e hashtags. Limites: legenda ≤ 2.200 caracteres,
 2–10 imagens por carrossel. Reels exigem vídeo gravado.
+
+**Destaques:** a API publica stories, mas **não cria destaques**. Gere os stories de cada destaque
+(1080×1920, margem segura ~250px no topo e ~320px embaixo), prepare com `prepare <pasta> destaque-<n> --stories`
+e publique com `stories destaque-<n> --confirmado`. Depois o usuário, no app: Perfil → + → Destaque →
+escolhe os stories (ficam no Arquivo mesmo após 24h) → define a capa (`destaques/capas/`).
+Figurinha de link não existe pela API — o endereço vai escrito no story.
 
 **Ritmo e lembrete:** combine com o usuário quantos posts por dia (ex.: 3) e crie uma tarefa
 agendada diária que lê `status.json`, mostra a prévia dos posts do dia e **só publica após

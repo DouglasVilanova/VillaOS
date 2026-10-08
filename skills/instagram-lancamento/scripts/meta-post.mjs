@@ -1,4 +1,4 @@
-// Publica carrosséis no Instagram e no Facebook via Meta Graph API. Copie para <repo-do-site>/scripts/.
+// Publica carrosséis e stories no Instagram e no Facebook via Meta Graph API. Copie para <repo-do-site>/scripts/.
 //
 //   node scripts/meta-post.mjs prepare <pasta-do-carrossel> <slug>
 //       PNGs de <pasta>/instagram/slide-NN.png -> public/instagram/<slug>/slide-NN.jpg (o IG só aceita JPEG)
@@ -6,6 +6,8 @@
 //       confere se as imagens já respondem 200 no site (a Meta busca por URL pública)
 //   node scripts/meta-post.mjs publish <pasta-do-carrossel> <slug> --confirmado [--so-ig | --so-fb]
 //       posta usando <pasta>/legenda.md. Sem --confirmado, só mostra o que seria publicado.
+//   node scripts/meta-post.mjs stories <slug> --confirmado
+//       publica cada imagem de public/instagram/<slug>/ como story (1080x1920)
 //
 // Lê META_PAGE_ACCESS_TOKEN, META_PAGE_ID, META_IG_USER_ID e META_GRAPH_VERSION de .env/.env.local.
 // O token nunca é impresso.
@@ -66,7 +68,7 @@ async function prepare() {
   const sharp = require("sharp");
   const src = path.join(path.resolve(folder), "instagram");
   const pngs = fs.readdirSync(src).filter((f) => /^slide-\d+\.png$/.test(f)).sort();
-  if (pngs.length < 1 || pngs.length > 10) throw new Error(`carrossel precisa de 1 a 10 slides (tem ${pngs.length})`);
+  if (pngs.length < 1 || (pngs.length > 10 && !flags.has("--stories"))) throw new Error(`carrossel precisa de 1 a 10 slides (tem ${pngs.length})`);
   fs.mkdirSync(publicDir(slug), { recursive: true });
   for (const f of pngs) {
     await sharp(path.join(src, f)).flatten({ background: "#000" }).jpeg({ quality: 90, mozjpeg: true })
@@ -126,6 +128,23 @@ async function postFacebook(urls, text) {
   return `https://www.facebook.com/${id}`;
 }
 
+// Stories: cada imagem vira um story (destaques são montados depois, no app — a API não cria destaques)
+async function stories() {
+  if (!TOKEN || !IG_ID) throw new Error("faltam META_PAGE_ACCESS_TOKEN / META_IG_USER_ID no .env");
+  const s = folder; // em "stories", o 1º argumento é o slug
+  const urls = imageUrls(s);
+  console.log(`${urls.length} story(s) de ${s}`);
+  if (!flags.has("--confirmado")) return console.log("Prévia apenas. Para publicar, rode de novo com --confirmado.");
+  for (const u of urls) if ((await fetch(u, { method: "HEAD" })).status !== 200) throw new Error(`imagem fora do ar: ${u}`);
+  for (const image_url of urls) {
+    const { id } = await graph("POST", `${IG_ID}/media`, { image_url, media_type: "STORIES" });
+    await waitReady(id);
+    await graph("POST", `${IG_ID}/media_publish`, { creation_id: id });
+    console.log("✓ story", path.basename(image_url));
+    await new Promise((r) => setTimeout(r, 4000));
+  }
+}
+
 async function publish() {
   if (!TOKEN || !PAGE_ID || !IG_ID) throw new Error("faltam META_PAGE_ACCESS_TOKEN / META_PAGE_ID / META_IG_USER_ID no .env");
   const dir = path.resolve(folder);
@@ -141,6 +160,6 @@ async function publish() {
   if (!flags.has("--so-ig")) console.log("✓ Facebook:", await postFacebook(urls, text));
 }
 
-const run = { prepare, check, publish }[cmd];
-if (!run) console.log("uso: node scripts/meta-post.mjs prepare|check|publish ...");
+const run = { prepare, check, publish, stories }[cmd];
+if (!run) console.log("uso: node scripts/meta-post.mjs prepare|check|publish|stories ...");
 else run().catch((e) => { console.error("✗", e.message); process.exitCode = 1; });

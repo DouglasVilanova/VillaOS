@@ -34,6 +34,10 @@ Cada slide é um `<div class="slide <fundo>">` dentro de `slides.html`. Fundos: 
 | `.check > i` | checklist com ✓ |
 | `.vs > .a / .b > h3, p` | comparação lado a lado (antes/depois, chat/agente) |
 | `.imgbox > img` | imagem com cantos arredondados e sombra (ex.: infográfico do blog) |
+| `.split > .txt + .shot` | texto à esquerda + celular à direita |
+| `.shot > img` (`.shot.lg` maior) | celular com print real do site do cliente |
+| `.logo-card.claro / .escuro > img` | cartão com o logo do cliente (fundo conforme o logo) |
+| `.live` | selo "ao vivo" com o endereço do site do cliente |
 | `.center` (no `.body`) | centraliza tudo — usar no slide de CTA |
 | `.cta-btn` | botão-pílula do CTA |
 
