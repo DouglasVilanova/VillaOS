@@ -1,0 +1,22 @@
+{
+  "company": "Nome da Empresa",
+  "handle": "@empresa",
+  "city": "Cidade / UF",
+  "site": "https://www.exemplo.com.br",
+  "whatsapp": "55DDDNUMERO",
+  "email": "contato@exemplo.com.br",
+  "logo": "../../caminho/para/logo.png",
+  "font": "Inter",
+  "colors": {
+    "dark": "#0A0A0A",
+    "light": "#FAFAF7",
+    "accent": "#00FF88",
+    "accentOnLight": "#00994F",
+    "onAccent": "#0A0A0A"
+  },
+  "services": [
+    { "name": "Serviço 1", "url": "/servico-1" }
+  ],
+  "publicCases": ["Cliente A — o que foi entregue (só o que já é público)"],
+  "blog": "/blog"
+}

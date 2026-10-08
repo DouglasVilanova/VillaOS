@@ -14,6 +14,7 @@ gatilhos em português) e arquivos de apoio quando necessário.
 | `publicar-site` | 1 | planejada |
 | `blog` | 2 | planejada |
 | `blog-seo-cluster` | 2 | **pronta** — cluster de posts (pesquisa → posts → imagens Higgsfield → publicação) |
+| `instagram-lancamento` | 2 | **pronta** — perfil novo: plano, bio, destaques (capas) e primeiros posts renderizados em PNG |
 | `formulario-leads` | 2 | planejada |
 | `chatbot-lp` | 2 | planejada |
 | `design-cliente` | 3 | planejada |
