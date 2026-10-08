@@ -55,7 +55,7 @@ Todo o conteúdo do kit e das skills é extraído de código real em produção:
 
 Lacunas encontradas nessas fontes, que o kit corrige por padrão:
 
-1. Qualquer usuário autenticado é admin total (4tentos). Kit: allowlist `admins` + `is_admin()`.
+1. Qualquer usuário autenticado é admin total (4tentos). Kit: allowlist por `app_metadata.role = 'admin'` (ver 12.1).
 2. Lead existe só como e-mail; SMTP fora do ar perde o lead (4tentos). Kit: grava em `leads` antes.
 3. Sitemap e robots ausentes (4tentos). Kit: `sitemap.ts` e `robots.ts` sempre presentes.
 4. Rate limit em memória não sobrevive a múltiplas instâncias (ambos). Kit: rate limit em
@@ -70,7 +70,7 @@ Lacunas encontradas nessas fontes, que o kit corrige por padrão:
 ### 3.1 Estrutura no VillaOS
 
 ```
-templates/site-kit/                    starter kit
+skills/novo-site/kit/                  starter kit (ver 12.1)
   KIT.md                               contrato: o que trocar por cliente
   regras.md                            regras de implicação (seção 5)
   app/(site)/                          home, blog, not-found, error
@@ -229,7 +229,7 @@ nesse caso a pergunta "quantas pessoas vão editar" é ignorada.
 
 O `CLAUDE.md` do cliente instrui: "antes de qualquer tarefa neste projeto, ler `site.json`
 e `design-system.md`; ao adicionar módulo, atualizar `site.json` e aplicar
-`templates/site-kit/regras.md`".
+`templates/site-kit/regras.md`". (ver 12.1)
 
 ### 4.1 Detecção no briefing
 
@@ -252,7 +252,7 @@ tracking; fase 2 adiciona blog e contatos; fase 4 adiciona catálogo e contas de
 
 ## 5. Regras de implicação
 
-Arquivo `templates/site-kit/regras.md`. Aplicadas por `/novo-site` na criação e por
+Arquivo `templates/site-kit/regras.md`. Aplicadas por `/novo-site` na criação e por (ver 12.1)
 qualquer skill que adicione módulo. Também usadas pelos agentes para saber o que auditar.
 Cada fase de implementação acrescenta ao arquivo só as regras dos módulos que entrega;
 um módulo sem implementação ainda não aparece no briefing.
@@ -289,7 +289,7 @@ todo HTML vindo do banco e por escrita restrita a admin; o checklist registra is
 aceito, não como achado. Sites estáticos legados (despachante) mantêm `script-src 'self'`.
 
 Acesso admin ao banco por modo: em `env-hmac` o servidor usa `service_role` (ignora RLS) e
-nenhuma policy de admin existe; em `supabase-admin` as policies usam `is_admin()`; em
+nenhuma policy de admin existe; em `supabase-admin` as policies usam `is_admin()`; em (ver 12.1)
 `multiusuario`, `profiles.role = 'admin'`. O checklist de segurança aplica a regra do modo.
 
 ---
@@ -339,7 +339,7 @@ memória), `proxy.ts` só com o gate de preview (sem importar `lib/auth`), `next
 `supabase/`. Os módulos não existem no projeto até a ativação. Workflow (o flag define o
 modo; `--proposta` pula briefing de módulos, Supabase, auth e remoção de módulos): checar pré-requisitos (seção 3.5) → briefing (seção 4.1) → se não houver `design-system.md`, chamar
 `/design-cliente` (a partir da fase 3) ou, antes disso, perguntar cores, fontes e logo e
-gravar um `design-system.md` mínimo do template → copiar `templates/site-kit/`
+gravar um `design-system.md` mínimo do template → copiar `templates/site-kit/` (ver 12.1)
 para `clientes/<x>/` → gravar `site.json` → aplicar regras → remover módulos não usados →
 gerar `CLAUDE.md` do cliente → `npm install && npm run build` → criar repo e configurar
 autor do commit Villa Digital → deploy de preview.
@@ -367,7 +367,7 @@ Três modos, escolhidos pela resposta do briefing:
 | Modo | Uso | Implementação |
 |---|---|---|
 | `env-hmac` | 1 editor | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`; cookie HMAC-SHA256 httpOnly/secure/lax 7 dias; comparação em tempo constante; escrita no banco via `service_role` no servidor |
-| `supabase-admin` | 2-3 editores | Supabase Auth com signup desligado; tabela `admins(email)`; função `is_admin()` usada nas policies; usuários criados no dashboard |
+| `supabase-admin` | 2-3 editores | Supabase Auth com signup desligado; só entra `app_metadata.role = 'admin'`; usuários criados no dashboard (ver 12.1) |
 | `multiusuario` | visitantes criam conta | signup, confirmação de e-mail, reset de senha, `profiles(id, role)`, RLS por dono, área `/conta` |
 
 Comum: proxy → layout → `requireAdmin()`/`requireUser()` em toda action; logout
@@ -567,9 +567,9 @@ Cada fase termina com validação num projeto descartável `clientes/_teste-kit/
 Cada fase é utilizável sozinha. Ao fim de cada fase: `README.md`,
 `templates/skills/catalogo.md`, `CLAUDE.md` e `regras.md` atualizados com o que ela entregou.
 
-| Fase | Kit (`templates/site-kit/`) | Skills | Agentes / ajustes |
+| Fase | Kit (`templates/site-kit/`) | Skills | Agentes / ajustes | (ver 12.1)
 |---|---|---|---|
-| 1. Base | `package.json`, `next.config.ts` (headers + CSP), `.gitignore` (inclui `.auditoria/`), `.env.example`, `app/layout.tsx`; `app/(site)/` home e páginas de erro; `app/gestao/` login, blocos, seo, visibilidade, seguranca; `app/api/upload`; `sitemap`, `robots`, `manifest`, `opengraph-image`; `lib/` settings, auth (`env-hmac`, `supabase-admin`), rate-limit, upload, seo, slug, csp, supabase; `components/gestao/` (exceto RichTextEditor); `JsonLd`; `supabase/` 001 (settings, storage), 003 (RPCs de settings, `rate_limits` + `hit_rate_limit`), 004 (hardening, `admins` + `is_admin()`); `proxy.ts`; `KIT.md`; `regras.md` com `painel`, `tracking`, `local`, `status` | `novo-site`, `orquestrar`, `painel-gestao`, `auth-admin`, `seo-tecnico`, `seguranca`, `publicar-site` | `security-auditor`; tabela de roteamento e ajustes em `CLAUDE.md`, `novo-projeto`, `seo` |
+| 1. Base | `package.json`, `next.config.ts` (headers + CSP), `.gitignore` (inclui `.auditoria/`), `.env.example`, `app/layout.tsx`; `app/(site)/` home e páginas de erro; `app/gestao/` login, blocos, seo, visibilidade, seguranca; `app/api/upload`; `sitemap`, `robots`, `manifest`, `opengraph-image`; `lib/` settings, auth (`env-hmac`, `supabase-admin`), rate-limit, upload, seo, slug, csp, supabase; `components/gestao/` (exceto RichTextEditor); `JsonLd`; `supabase/` 001 (settings, storage), 003 (RPCs de settings, `rate_limits` + `hit_rate_limit`), 004 (hardening; ver 12.1); `proxy.ts`; `KIT.md`; `regras.md` com `painel`, `tracking`, `local`, `status` | `novo-site`, `orquestrar`, `painel-gestao`, `auth-admin`, `seo-tecnico`, `seguranca`, `publicar-site` | `security-auditor`; tabela de roteamento e ajustes em `CLAUDE.md`, `novo-projeto`, `seo` |
 | 2. Conteúdo e conversão | checklist de `/seguranca` ganha "lead gravado antes do e-mail" e RLS de `leads`; `app/(site)/blog`, `app/gestao/(protected)/blog` e `leads`, `app/api/leads`, `RichTextEditor`, `supabase/` 002 e 005; regras de `blog`, `formulario-leads`, `chatbot` | `blog`, `formulario-leads`, `chatbot-lp` | — |
 | 3. Visual | `components/motion/` | `design-cliente`, `animacoes` | ajuste em `carrossel`; `novo-site` passa a chamar `design-cliente` |
 | 4. Qualidade | — (multiusuário fica na pasta da skill `auth-admin`) | `performance`, `auditar-site`; modo `multiusuario` em `auth-admin`; regras de `catalogo` e `area-membros` | `seo-auditor`, `performance-auditor`; `publicar-site` passa a usar `auditar-site` |
@@ -579,6 +579,30 @@ até lá, catálogos seguem o padrão blass manualmente.
 
 ---
 
+## 12.1 Ajustes feitos na implementação da fase 1
+
+1. O kit vive em `skills/novo-site/kit/` (o repositório tem só skills e agentes); `regras.md`,
+   `briefing.md` e templates ficam em `skills/novo-site/`.
+2. Toda escrita no banco passa pelo servidor com `service_role` depois de `requireAdmin()`, nos
+   dois modos; o banco não tem policy de escrita. Sem `is_admin()` em policies.
+3. Allowlist do `supabase-admin` por `app_metadata.role = 'admin'` (padrão já usado no site da
+   agência), sem tabela `admins`.
+4. `rateLimit` é assíncrono.
+5. No modo proposta `lib/supabase/` permanece (leitura e rate limit caem para defaults/memória).
+6. `noindex` em todo status diferente de `online`.
+7. Componentes de gestão da fase 1: `BlockForm`, `ImageUpload`; `GalleryUpload` e `Toast` quando
+   algum bloco precisar.
+8. Gate de preview em todo status fora de `online`, ligado só com `PREVIEW_PASSWORD` e
+   `PREVIEW_SECRET` (obrigatórias em `proposta`, opcionais em `desenvolvimento`).
+9. Zod fica para a fase 2; na fase 1 a validação do conteúdo é o `mergeSettings`.
+10. Tokens HMAC com prefixo de finalidade (`admin:`, `preview:`).
+11. Migrations aplicadas por `psql` (Session pooler) ou SQL Editor.
+12. CLI da Vercel logado como `villadigitalmail-7623`; GitHub como `villadigitalmail-create`.
+13. Projeto do kit roda em `next build` com `images.unoptimized` (uploads já otimizados no Sharp).
+14. next 16.4, sharp 0.35 e vitest 5 (vulnerabilidades nas versões originais); kit exige Node >= 22.12.
+15. Sessão env-hmac vinculada a ADMIN_EMAIL, ADMIN_PASSWORD e SESSION_SECRET; trocar qualquer um encerra as sessões.
+16. Rate limit de login por IP+e-mail (5/15 min) e por conta (20/15 min) nos dois modos.
+17. Actions sem sessão passam pelo proxy e o requireAdmin redireciona ao login; páginas de gestão sempre dinâmicas.
 ## 13. Decisões registradas
 
 | Decisão | Escolha | Alternativa descartada |
