@@ -8,7 +8,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 import type { Resultado } from "@/lib/resultado";
 import { createClient } from "@/lib/supabase/server";
-import { LOGIN_JANELA_MS, LOGIN_LIMITE } from "./constants";
+import { EMAIL_MAX, LOGIN_JANELA_MS, LOGIN_LIMITE } from "./constants";
 import type { AdminSession } from "./types";
 
 export const AUTH_MODE = "supabase-admin";
@@ -31,7 +31,7 @@ export async function requireAdmin(): Promise<AdminSession> {
 
 export async function signIn(email: string, senha: string): Promise<Resultado> {
   if (!hasSupabase()) return { ok: false, erro: "Banco não configurado neste ambiente." };
-  const normal = email.trim().toLowerCase();
+  const normal = email.trim().toLowerCase().slice(0, EMAIL_MAX);
   const rl = await rateLimit(`login:${await clientIp()}:${normal}`, LOGIN_LIMITE, LOGIN_JANELA_MS);
   if (!rl.ok) return { ok: false, erro: `Muitas tentativas. Tente de novo em ${Math.ceil(rl.retryAfterMs / 60000)} min.` };
 
@@ -47,19 +47,20 @@ export async function signIn(email: string, senha: string): Promise<Resultado> {
 
 export async function signOut(): Promise<void> {
   if (!hasSupabase()) return;
-  await (await createClient()).auth.signOut();
+  await (await createClient()).auth.signOut({ scope: "local" });
 }
 
 export async function changePassword(atual: string, nova: string): Promise<Resultado> {
   const admin = await requireAdmin();
   const problema = validatePassword(nova);
   if (problema) return { ok: false, erro: problema };
-  const rl = await rateLimit(`senha:${admin.email}`, LOGIN_LIMITE, LOGIN_JANELA_MS);
+  const rl = await rateLimit(`senha:${admin.email.slice(0, EMAIL_MAX)}`, LOGIN_LIMITE, LOGIN_JANELA_MS);
   if (!rl.ok) return { ok: false, erro: "Muitas tentativas. Tente de novo mais tarde." };
   const sb = await createClient();
   const { error: erroAtual } = await sb.auth.signInWithPassword({ email: admin.email, password: atual });
   if (erroAtual) return { ok: false, erro: "Senha atual incorreta." };
   const { error } = await sb.auth.updateUser({ password: nova });
   if (error) return { ok: false, erro: error.message };
+  await sb.auth.signOut({ scope: "others" });
   return { ok: true };
 }

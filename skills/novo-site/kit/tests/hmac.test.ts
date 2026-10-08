@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { signValue, verifyValue, safeEqual } from "@/lib/hmac";
+import { signValue, verifyValue, safeEqual, hmacB64url } from "@/lib/hmac";
 
 const S = "segredo-de-teste-com-32-caracteres!!";
 
@@ -48,5 +48,15 @@ describe("safeEqual", () => {
     expect(await safeEqual("abc", "abc", S)).toBe(true);
     expect(await safeEqual("abc", "abd", S)).toBe(false);
     expect(await safeEqual("abc", "abcd", S)).toBe(false);
+  });
+});
+
+describe("hmacB64url", () => {
+  it("é determinístico, base64url e depende do segredo", async () => {
+    const a = await hmacB64url("senha", S);
+    expect(a).toBe(await hmacB64url("senha", S));
+    expect(a).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    expect(a).not.toBe(await hmacB64url("senha2", S));
+    expect(a).not.toBe(await hmacB64url("senha", "outro-segredo"));
   });
 });

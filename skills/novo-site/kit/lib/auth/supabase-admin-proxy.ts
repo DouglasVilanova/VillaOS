@@ -13,10 +13,11 @@ export async function checkAdminRequest(req: NextRequest): Promise<ChecagemProxy
   const sb = createServerClient(url, chave, {
     cookies: {
       getAll: () => req.cookies.getAll(),
-      setAll(lista) {
+      setAll(lista, headers) {
         lista.forEach(({ name, value }) => req.cookies.set(name, value));
         res = NextResponse.next({ request: req });
         lista.forEach(({ name, value, options }) => res.cookies.set(name, value, options));
+        Object.entries(headers ?? {}).forEach(([k, v]) => res.headers.set(k, v));
       },
     },
   });

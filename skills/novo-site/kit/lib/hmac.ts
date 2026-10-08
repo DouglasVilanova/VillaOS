@@ -47,6 +47,11 @@ export async function verifyValue(token: string, segredo: string, agora = Date.n
   }
 }
 
+/** HMAC-SHA256 completo em base64url. */
+export async function hmacB64url(valor: string, segredo: string): Promise<string> {
+  return paraB64url(new Uint8Array(await crypto.subtle.sign("HMAC", await chave(segredo), enc.encode(valor))));
+}
+
 /** Comparação em tempo constante: HMAC dos dois lados, mesmo tamanho de buffer. */
 export async function safeEqual(a: string, b: string, segredo: string): Promise<boolean> {
   const k = await chave(segredo);

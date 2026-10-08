@@ -46,6 +46,10 @@ declare
   v_janela interval := make_interval(secs => (p_window_ms / 1000.0)::double precision);
   r public.rate_limits;
 begin
+  if random() < 0.01 then
+    delete from public.rate_limits where reset_at < now() - interval '1 day';
+  end if;
+
   insert into public.rate_limits as t (key, count, reset_at)
   values (p_key, 1, v_now + v_janela)
   on conflict (key) do update
