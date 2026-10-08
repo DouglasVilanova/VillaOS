@@ -6,7 +6,7 @@ médio, baixo), `arquivo:linha` e a skill que corrige.
 
 | Agente | Fase | Status |
 |---|---|---|
-| `security-auditor` | 1 | planejado |
+| `security-auditor` | 1 | disponível |
 | `seo-auditor` | 4 | planejado |
 | `performance-auditor` | 4 | planejado |
 

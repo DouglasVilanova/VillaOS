@@ -5,13 +5,13 @@ gatilhos em português) e arquivos de apoio quando necessário.
 
 | Skill | Fase | Status |
 |---|---|---|
-| `novo-site` | 1 | planejada |
-| `orquestrar` | 1 | planejada |
-| `painel-gestao` | 1 | planejada |
-| `auth-admin` | 1 | planejada |
-| `seo-tecnico` | 1 | planejada |
-| `seguranca` | 1 | planejada |
-| `publicar-site` | 1 | planejada |
+| `novo-site` | 1 | disponível |
+| `orquestrar` | 1 | disponível |
+| `painel-gestao` | 1 | disponível |
+| `auth-admin` | 1 | disponível |
+| `seo-tecnico` | 1 | disponível |
+| `seguranca` | 1 | disponível |
+| `publicar-site` | 1 | disponível |
 | `blog` | 2 | planejada |
 | `blog-seo-cluster` | 2 | **pronta** — cluster de posts (pesquisa → posts → imagens Higgsfield → publicação) |
 | `instagram-lancamento` | 2 | **pronta** — perfil novo: plano, bio, destaques (capas) e primeiros posts renderizados em PNG |
