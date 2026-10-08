@@ -16,5 +16,6 @@ export function clampText(s: string, max = 160): string {
 export function absUrl(u: string | undefined, base: string): string | undefined {
   if (!u) return undefined;
   if (/^https?:\/\//i.test(u)) return u;
+  if (u.startsWith("//")) return `https:${u}`;
   return `${base}${u.startsWith("/") ? "" : "/"}${u}`;
 }

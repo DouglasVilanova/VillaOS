@@ -29,6 +29,12 @@ describe("buildCsp", () => {
     expect(diretiva(c, "connect-src")).toContain("*.supabase.co");
   });
 
+  it("tracking: amazonaws só em connect-src", () => {
+    const c = buildCsp("tracking", { dev: false });
+    expect(diretiva(c, "script-src")).not.toContain("amazonaws");
+    expect(diretiva(c, "connect-src")).toContain("*.amazonaws.com");
+  });
+
   it("dev adiciona unsafe-eval em qualquer perfil", () => {
     expect(diretiva(buildCsp("rigido", { dev: true }), "script-src")).toContain("'unsafe-eval'");
   });

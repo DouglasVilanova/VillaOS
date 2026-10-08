@@ -31,6 +31,7 @@ describe("seo", () => {
     expect(absUrl("/img.webp", "https://x.com")).toBe("https://x.com/img.webp");
     expect(absUrl("img.webp", "https://x.com")).toBe("https://x.com/img.webp");
     expect(absUrl("https://cdn.com/a.webp", "https://x.com")).toBe("https://cdn.com/a.webp");
+    expect(absUrl("//cdn.com/a.webp", "https://x.com")).toBe("https://cdn.com/a.webp");
     expect(absUrl(undefined, "https://x.com")).toBeUndefined();
     expect(absUrl("", "https://x.com")).toBeUndefined();
   });

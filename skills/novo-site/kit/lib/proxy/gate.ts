@@ -12,10 +12,11 @@ export async function previewGate(req: NextRequest, cfg: GateConfig): Promise<Ne
   if (caminho === "/preview" || caminho.startsWith("/preview/")) return null;
   const token = req.cookies.get(PREVIEW_COOKIE)?.value;
   if (token && (await verifyValue(token, cfg.segredo)) === PREVIEW_TOKEN) return null;
+  const destino = caminho + req.nextUrl.search;
   const url = req.nextUrl.clone();
   url.pathname = "/preview";
   url.search = "";
-  url.searchParams.set("next", caminho);
+  url.searchParams.set("next", destino);
   return NextResponse.redirect(url);
 }
 

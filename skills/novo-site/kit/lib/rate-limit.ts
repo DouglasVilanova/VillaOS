@@ -5,10 +5,13 @@ import { hasSupabaseAdmin } from "./env";
 export type RateResult = { ok: boolean; retryAfterMs: number };
 export type Limiter = (key: string, limit: number, windowMs: number) => Promise<RateResult>;
 
-export function createMemoryLimiter(agora: () => number = Date.now): Limiter {
+export function createMemoryLimiter(agora: () => number = Date.now, max = 10_000): Limiter {
   const buckets = new Map<string, { count: number; resetAt: number }>();
   return async (key, limit, windowMs) => {
     const now = agora();
+    if (buckets.size > max) {
+      for (const [k, v] of buckets) if (v.resetAt <= now) buckets.delete(k);
+    }
     const b = buckets.get(key);
     if (!b || b.resetAt <= now) {
       buckets.set(key, { count: 1, resetAt: now + windowMs });

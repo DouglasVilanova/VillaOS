@@ -11,9 +11,8 @@ const TRACKING_SCRIPT = [
   "*.doubleclick.net",
   "*.facebook.com",
   "*.facebook.net",
-  "*.amazonaws.com", // Facebook CAPI
 ];
-const TRACKING_CONNECT = ["analytics.google.com", "www.google.com", "*.google.com.br"];
+const TRACKING_CONNECT = ["analytics.google.com", "www.google.com", "*.google.com.br", "*.amazonaws.com"]; // amazonaws: Facebook CAPI
 
 export function buildCsp(perfil: CspProfile, opcoes: { dev: boolean }): string {
   const d: Record<string, string[]> = {

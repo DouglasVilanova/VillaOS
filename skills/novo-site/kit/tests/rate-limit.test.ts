@@ -16,6 +16,17 @@ describe("createMemoryLimiter", () => {
     expect((await rl("k", 2, 1000)).ok).toBe(true);
   });
 
+  it("evicta buckets expirados quando passa do máximo", async () => {
+    let t = 0;
+    const rl = createMemoryLimiter(() => t, 3);
+    for (const k of ["a", "b", "c", "d"]) await rl(k, 1, 1000);
+    t = 2000;
+    await rl("e", 1, 1000);
+    const r = await rl("a", 1, 1000);
+    expect(r.ok).toBe(true);
+    expect(r.retryAfterMs).toBe(0);
+  });
+
   it("chaves são independentes", async () => {
     const rl = createMemoryLimiter(() => 0);
     await rl("a", 1, 1000);

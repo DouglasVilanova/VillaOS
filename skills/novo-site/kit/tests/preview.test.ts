@@ -33,6 +33,12 @@ describe("previewGate", () => {
     expect(destino.searchParams.get("next")).toBe("/sobre");
   });
 
+  it("preserva a query string em next", async () => {
+    const res = await previewGate(new NextRequest("http://localhost/sobre?x=1"), cfg);
+    const destino = new URL(res!.headers.get("location")!);
+    expect(destino.searchParams.get("next")).toBe("/sobre?x=1");
+  });
+
   it("a própria /preview passa", async () => {
     expect(await previewGate(new NextRequest("http://localhost/preview"), cfg)).toBeNull();
   });
