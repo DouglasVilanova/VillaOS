@@ -6,8 +6,16 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   const origem = req.headers.get("origin");
-  if (origem && new URL(origem).host !== req.headers.get("host")) {
-    return NextResponse.json({ erro: "Origem inválida" }, { status: 403 });
+  if (origem) {
+    let hostOrigem: string | null = null;
+    try {
+      hostOrigem = new URL(origem).host;
+    } catch {
+      // Origin "null" ou malformado: rejeitado abaixo.
+    }
+    if (hostOrigem !== req.headers.get("host")) {
+      return NextResponse.json({ erro: "Origem inválida" }, { status: 403 });
+    }
   }
   if (!(await getAdmin())) return NextResponse.json({ erro: "Não autorizado" }, { status: 401 });
   const form = await req.formData();

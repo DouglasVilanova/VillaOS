@@ -8,7 +8,8 @@ export async function compressImage(arquivo: File, max = 2400, qualidade = 0.9):
   const canvas = document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
-  canvas.getContext("2d")!.drawImage(bmp, 0, 0, w, h);
+  const ctx = canvas.getContext("2d")!;
+  ctx.drawImage(bmp, 0, 0, w, h);
   bmp.close();
   const gerar = (tipo: string) =>
     new Promise<Blob>((resolve, reject) =>
@@ -16,5 +17,10 @@ export async function compressImage(arquivo: File, max = 2400, qualidade = 0.9):
     );
   const webp = await gerar("image/webp");
   // Safari/iOS não codifica WebP e devolve PNG: reencoda em JPEG para não estourar o limite de corpo.
-  return webp.type === "image/webp" ? webp : gerar("image/jpeg");
+  if (webp.type === "image/webp") return webp;
+  // JPEG não tem transparência: pinta branco atrás da imagem para PNGs transparentes não ficarem pretos.
+  ctx.globalCompositeOperation = "destination-over";
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, w, h);
+  return gerar("image/jpeg");
 }
