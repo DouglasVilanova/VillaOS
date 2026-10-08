@@ -21,7 +21,7 @@ export function Hero({ hero }: { hero: SiteSettings["hero"] }) {
         </div>
         {hero.imagem ? (
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-suave">
-            <Image src={hero.imagem} alt="" fill priority sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+            <Image src={hero.imagem} alt="" fill preload sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
           </div>
         ) : null}
       </div>

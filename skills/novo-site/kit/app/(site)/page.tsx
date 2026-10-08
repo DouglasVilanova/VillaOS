@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { Hero } from "@/components/sections/Hero";
 import { Sobre } from "@/components/sections/Sobre";
@@ -7,6 +8,8 @@ import { getSettings } from "@/lib/settings-read";
 
 // Estático com revalidação: o painel chama revalidatePath ao salvar; 1h é a rede de segurança.
 export const revalidate = 3600;
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
   const s = await getSettings();

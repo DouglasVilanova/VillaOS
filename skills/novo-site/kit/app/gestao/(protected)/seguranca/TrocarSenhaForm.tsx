@@ -15,6 +15,10 @@ export function TrocarSenhaForm() {
         Nova senha
         <input name="nova" type="password" required minLength={10} autoComplete="new-password" className="mt-1 w-full rounded-lg border border-black/15 bg-white px-3 py-2" />
       </label>
+      <label className="block text-sm font-medium">
+        Confirmar nova senha
+        <input name="confirmacao" type="password" required minLength={10} autoComplete="new-password" className="mt-1 w-full rounded-lg border border-black/15 bg-white px-3 py-2" />
+      </label>
       <p className="text-xs opacity-60">Mínimo 10 caracteres, com maiúscula, minúscula e número.</p>
       {estado ? (
         <p role="status" className={`text-sm ${estado.ok ? "text-green-700" : "text-red-700"}`}>

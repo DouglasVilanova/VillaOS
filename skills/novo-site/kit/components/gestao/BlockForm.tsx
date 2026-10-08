@@ -39,7 +39,13 @@ export function BlockForm({
   }
 
   return (
-    <div className="max-w-2xl space-y-5">
+    <form
+      className="max-w-2xl space-y-5"
+      onSubmit={(e) => {
+        e.preventDefault();
+        salvar();
+      }}
+    >
       <h1 className="text-2xl font-bold">{titulo}</h1>
       {campos.map((c) => (
         <div key={c.nome}>
@@ -74,7 +80,7 @@ export function BlockForm({
         </div>
       ))}
       <div className="flex items-center gap-4">
-        <button onClick={salvar} disabled={pendente} className="rounded-full bg-neutral-900 px-5 py-2 font-semibold text-white disabled:opacity-60">
+        <button type="submit" disabled={pendente} className="rounded-full bg-neutral-900 px-5 py-2 font-semibold text-white disabled:opacity-60">
           {pendente ? "Salvando…" : "Salvar"}
         </button>
         {msg ? (
@@ -83,6 +89,6 @@ export function BlockForm({
           </p>
         ) : null}
       </div>
-    </div>
+    </form>
   );
 }

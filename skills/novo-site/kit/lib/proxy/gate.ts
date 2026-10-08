@@ -10,6 +10,7 @@ export async function previewGate(req: NextRequest, cfg: GateConfig): Promise<Ne
   if (!cfg.ativo || !cfg.senha || !cfg.segredo) return null;
   const caminho = req.nextUrl.pathname;
   if (caminho === "/preview" || caminho.startsWith("/preview/")) return null;
+  if (caminho === "/robots.txt") return null;
   const token = req.cookies.get(PREVIEW_COOKIE)?.value;
   if (token && (await verifyValue(token, cfg.segredo)) === PREVIEW_TOKEN) return null;
   const destino = caminho + req.nextUrl.search;

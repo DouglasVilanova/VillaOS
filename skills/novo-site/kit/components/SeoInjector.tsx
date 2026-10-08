@@ -18,6 +18,8 @@ export function SeoInjector({ html, alvo }: { html: string; alvo: "head" | "body
         const s = document.createElement("script");
         for (const a of Array.from(no.attributes)) s.setAttribute(a.name, a.value);
         s.text = no.text;
+        // Scripts recriados são assíncronos por padrão; mantém a ordem de execução.
+        if (s.src && !no.hasAttribute("async")) s.async = false;
         el = s;
       }
       pai.insertBefore(el, referencia);

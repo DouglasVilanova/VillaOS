@@ -10,7 +10,11 @@ export async function compressImage(arquivo: File, max = 2400, qualidade = 0.9):
   canvas.height = h;
   canvas.getContext("2d")!.drawImage(bmp, 0, 0, w, h);
   bmp.close();
-  return new Promise((resolve, reject) =>
-    canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Falha ao comprimir a imagem"))), "image/webp", qualidade),
-  );
+  const gerar = (tipo: string) =>
+    new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Falha ao comprimir a imagem"))), tipo, qualidade),
+    );
+  const webp = await gerar("image/webp");
+  // Safari/iOS não codifica WebP e devolve PNG: reencoda em JPEG para não estourar o limite de corpo.
+  return webp.type === "image/webp" ? webp : gerar("image/jpeg");
 }

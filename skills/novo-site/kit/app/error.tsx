@@ -1,6 +1,9 @@
 "use client";
 
-export default function Erro({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
+import { useEffect } from "react";
+
+export default function Erro({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => console.error(error), [error]);
   return (
     <main className="grid min-h-screen place-items-center px-4 text-center">
       <div>

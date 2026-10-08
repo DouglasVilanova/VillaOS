@@ -41,9 +41,9 @@ export function ImageUpload({ valor, onChange }: { valor: string; onChange: (url
         <img src={valor} alt="" className="h-32 w-auto rounded-lg border border-black/10 object-cover" />
       ) : null}
       <div className="flex items-center gap-3">
-        <label className="cursor-pointer rounded-lg border border-black/15 bg-white px-3 py-1.5 text-sm">
+        <label className="cursor-pointer rounded-lg border border-black/15 bg-white px-3 py-1.5 text-sm focus-within:ring-2 focus-within:ring-neutral-900">
           {enviando ? "Enviando…" : valor ? "Trocar imagem" : "Enviar imagem"}
-          <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="hidden" onChange={escolher} disabled={enviando} />
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" className="sr-only" onChange={escolher} disabled={enviando} />
         </label>
         {valor ? (
           <button type="button" className="text-sm underline" onClick={() => onChange("")}>
@@ -51,7 +51,7 @@ export function ImageUpload({ valor, onChange }: { valor: string; onChange: (url
           </button>
         ) : null}
       </div>
-      {erro ? <p className="text-sm text-red-700">{erro}</p> : null}
+      {erro ? <p role="alert" className="text-sm text-red-700">{erro}</p> : null}
     </div>
   );
 }
