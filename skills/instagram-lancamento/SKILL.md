@@ -5,7 +5,8 @@ description: >
   de lançamento (objetivo, pilares, calendário, metas), bio completa (@, nome pesquisável, bio de
   150 caracteres, links com UTM, respostas automáticas), destaques (roteiro dos stories + capas
   1080x1920 geradas em HTML) e os primeiros posts (carrosséis 1080x1350 e capas de Reel renderizados
-  em PNG na identidade da marca, com legenda e hashtags). Use sempre que o usuário disser "vou criar
+  em PNG na identidade da marca, com legenda e hashtags), galeria de revisão e publicação no
+  Instagram + Facebook via Meta Graph API (sempre com confirmação). Use sempre que o usuário disser "vou criar
   o Instagram", "montar o perfil", "bio do Instagram", "destaques", "primeiros posts", "plano de
   Instagram", "lançar a conta", "grid inicial" ou pedir carrosséis em lote para um perfil novo —
   mesmo sem dizer "lançamento". Para um carrossel avulso, prefira /carrossel.
@@ -96,8 +97,47 @@ instalado) e `sharp`.
    (mojibake = arquivo lido com encoding errado; no Windows/PowerShell use UTF-8 explícito),
    texto estourando, logo invisível, slide repetido.
 2. Gere `legenda.md` (do `## Legenda` do post) e copie o `.md` como `texto.md` em cada pasta.
-3. Commit no projeto. Entregue a prévia e a lista do que o usuário faz sozinho: gravar Reels,
-   autorização de clientes citados, confirmar o @.
+3. **Confira o @ real** antes de renderizar a versão final (a API devolve o `username` — o @
+   desejado muitas vezes não está disponível; ex.: `@empresa` virou `@empresa_x`).
+4. **Galeria para revisão:** crie `<conteudo>/status.json` (`{"NN": {"ordem": n, "previsto": "DD/MM/AAAA"}}`,
+   `"reel": true` para Reels sem vídeo) e rode
+   `node ~/.claude/skills/instagram-lancamento/scripts/galeria.js --config <cfg> <conteudo>` →
+   `galeria.html` com grid simulado do perfil + slides + legenda + status. Sirva com
+   `npx serve <conteudo>` (o navegador do app não abre `file://`).
+5. Commit no projeto. Entregue a galeria e a lista do que o usuário faz sozinho: gravar Reels,
+   autorização de clientes citados.
+
+## Passo 7 — Publicar (Meta Graph API) — opcional
+
+**Pré-requisitos (o usuário faz, uma vez):** Instagram profissional ligado à Página do Facebook;
+app tipo Empresa em developers.facebook.com com URL de política de privacidade e **URL de
+exclusão de dados válida** (a Meta valida — crie uma página `noindex` fora do menu se não existir);
+**usuário do sistema** no Gerenciador de Negócios com token sem expiração e permissões
+`instagram_basic, instagram_content_publish, pages_show_list, pages_read_engagement,
+pages_manage_posts, business_management` (só essas). Token em `<repo-do-site>/.env` como
+`META_PAGE_ACCESS_TOKEN` — **nunca colar no chat**, nunca com prefixo `NEXT_PUBLIC_`, não subir na
+Vercel se a postagem roda localmente.
+
+**Configuração (você faz):** descubra `META_PAGE_ID` e `META_IG_USER_ID` com
+`GET me/accounts?fields=id,name,instagram_business_account{id,username}` (sem imprimir o token) e
+grave no `.env` junto com `META_PUBLIC_SITE_URL`. Copie `scripts/meta-post.mjs` para
+`<repo-do-site>/scripts/`.
+
+**Fluxo por post** (a Meta baixa as imagens por URL pública; o Instagram só aceita JPEG):
+1. `node scripts/meta-post.mjs prepare <pasta-do-post> <NN-slug>` → JPEG em `public/instagram/<slug>/`
+2. commit + push só de `public/instagram/` e esperar `check <NN-slug>` responder tudo 200
+3. `publish <pasta> <slug>` (prévia) → mostrar slides + legenda → **pedir confirmação explícita**
+4. só depois do "sim": `publish ... --confirmado` (posta IG carrossel + FB multi-foto, devolve os links)
+5. atualizar `status.json` (publicado + links) e regenerar a galeria
+
+O script junta linhas quebradas da legenda (o `.md` tem quebras por largura que virariam quebras
+no post) e mantém parágrafos, listas com emoji e hashtags. Limites: legenda ≤ 2.200 caracteres,
+2–10 imagens por carrossel. Reels exigem vídeo gravado.
+
+**Ritmo e lembrete:** combine com o usuário quantos posts por dia (ex.: 3) e crie uma tarefa
+agendada diária que lê `status.json`, mostra a prévia dos posts do dia e **só publica após
+confirmação na conversa**. Publicar é irreversível e público — nunca agende publicação sem
+confirmação humana no momento.
 
 ## O que nunca fazer
 
