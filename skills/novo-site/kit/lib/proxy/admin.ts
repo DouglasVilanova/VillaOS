@@ -24,6 +24,9 @@ export async function adminGate(req: NextRequest): Promise<NextResponse> {
   } catch (e) {
     console.error("[proxy] auth:", e);
   }
+  // Server action sem sessão: deixa passar para requireAdmin() fazer o redirect próprio de actions
+  // (um 307 do proxy na resposta da action quebra o cliente e cai no error boundary).
+  if (!checagem.ok && !login && req.headers.has("next-action")) return checagem.res;
   if (!checagem.ok && !login) return redirecionar(req, "/gestao/login", checagem.res);
   if (checagem.ok && login) return redirecionar(req, "/gestao", checagem.res);
   return checagem.res;
