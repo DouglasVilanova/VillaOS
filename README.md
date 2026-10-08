@@ -68,9 +68,5 @@ cp agents/*.md ~/.claude/agents/
 
 ## Créditos
 
-Pensado para rodar junto do [MazyOS](https://github.com/mazzeoia/MazyOS), de Vagner
-Mazzeo, que fornece a memória do negócio e as skills de marketing. O VillaOS não
-redistribui conteúdo do MazyOS.
-
 Ideias de roteamento e orquestração inspiradas em
 [ag-kit](https://github.com/vudovn/ag-kit).

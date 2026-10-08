@@ -22,13 +22,13 @@ Os scripts e modelos ficam em `~/.claude/skills/blog-seo-cluster/`. Os dados do 
 
 ## Passo 0 — Contexto e config
 
-1. **Procure o config**: `marketing/blog/blog.config.json` na pasta atual (padrão MazyOS).
+1. **Procure o config**: `marketing/blog/blog.config.json` na pasta atual.
    Se não existir, copie `references/blog.config.example.json` para lá e preencha com o usuário
    (repo do site, URL, API, serviços, CTAs, estilo visual). Pergunte só o que não dá para descobrir
    olhando o repo do site (rotas de serviço, rota da API de posts, variável do segredo).
-2. **Se a pasta for um MazyOS** (tem `_memoria/` e `CLAUDE.md`): leia `_memoria/empresa.md`,
-   `_memoria/preferencias.md`, `_memoria/estrategia.md` e `identidade/design-guide.md`. Siga também
-   as regras de escrita de `.claude/skills/publicar-tema/SKILL.md` (frontmatter, estrutura, tom).
+2. **Se a pasta tiver memória do negócio** (`_memoria/` e `CLAUDE.md`): leia `_memoria/empresa.md`,
+   `_memoria/preferencias.md`, `_memoria/estrategia.md` e `identidade/design-guide.md`. Se existir
+   `.claude/skills/publicar-tema/SKILL.md`, siga também as regras de escrita dela (frontmatter, estrutura, tom).
 3. **Confira o que já existe no blog** (posts em `<contentDir>/posts/` e a listagem pública do blog)
    para não duplicar temas nem slugs.
 4. **Confira a estrutura do blog no repo do site** — um cluster de 10+ posts precisa de navegação.
@@ -154,5 +154,5 @@ API_URL=<localUrl ou siteUrl> node ~/.claude/skills/blog-seo-cluster/scripts/pub
 Pendências: ...
 ```
 
-No MazyOS, ao terminar, pergunte se quer atualizar a memória (`_memoria/estrategia.md` com o
-cluster publicado) e ofereça `/publicar-tema` para gerar carrossel + legendas dos posts.
+Se a pasta tiver `_memoria/`, ao terminar pergunte se quer atualizar a memória (`_memoria/estrategia.md`
+com o cluster publicado). Se a skill `/publicar-tema` existir, ofereça-a para gerar carrossel + legendas dos posts.

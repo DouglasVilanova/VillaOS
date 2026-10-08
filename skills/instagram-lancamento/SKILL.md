@@ -25,9 +25,9 @@ projeto** (`<pasta>/instagram.config.json`).
    `references/instagram.config.example.json` e preencha com o usuário: nome, @ desejado, cidade,
    site, WhatsApp, serviços (nome + URL), cases públicos, cores, fonte, caminho do logo.
    Descubra o que puder sozinho (site do cliente, `layout.tsx` para a fonte, `public/logo.*`).
-2. **Se for um MazyOS** (`_memoria/`, `CLAUDE.md`): leia `_memoria/empresa.md`,
-   `preferencias.md`, `estrategia.md` e `identidade/design-guide.md`; siga o tom e as regras de
-   `.claude/skills/carrossel/SKILL.md` (layouts nomeados, alternância de capas, legenda automática).
+2. **Se a pasta tiver memória do negócio** (`_memoria/`, `CLAUDE.md`): leia `_memoria/empresa.md`,
+   `preferencias.md`, `estrategia.md` e `identidade/design-guide.md`. Se existir
+   `.claude/skills/carrossel/SKILL.md`, siga o tom e as regras dela (layouts nomeados, alternância de capas, legenda automática).
 3. Reaproveite o que já existe: posts de blog (viram carrosséis), cases do site, imagens já geradas.
 
 ## Passo 1 — Plano (`marketing/instagram/PLANO.md`)

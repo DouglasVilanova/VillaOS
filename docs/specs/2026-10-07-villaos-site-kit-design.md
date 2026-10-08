@@ -4,10 +4,9 @@
 **Status:** aprovado no brainstorming, revisada (4 passes), aguardando revisão do usuário
 **Autor:** Douglas Vilanova (Villa Digital) + Claude
 
-> O VillaOS roda num workspace que já usa o MazyOS (Vagner Mazzeo) para memória do
-> negócio e skills de marketing (`carrossel`, `seo`, `anuncio-google`, `relatorio-ads`…).
-> Essas skills não fazem parte deste repositório; onde a spec fala em "skills existentes",
-> refere-se a elas.
+> O VillaOS roda num workspace que já tem memória do negócio (`_memoria/`) e skills de
+> marketing próprias (`carrossel`, `seo`, `anuncio-google`, `relatorio-ads`…). Essas skills
+> não fazem parte deste repositório; onde a spec fala em "skills existentes", refere-se a elas.
 
 ---
 
