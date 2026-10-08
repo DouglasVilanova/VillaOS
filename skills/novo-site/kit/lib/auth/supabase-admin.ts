@@ -61,6 +61,7 @@ export async function changePassword(atual: string, nova: string): Promise<Resul
   if (erroAtual) return { ok: false, erro: "Senha atual incorreta." };
   const { error } = await sb.auth.updateUser({ password: nova });
   if (error) return { ok: false, erro: error.message };
-  await sb.auth.signOut({ scope: "others" });
+  const { error: erroOutras } = await sb.auth.signOut({ scope: "others" });
+  if (erroOutras) console.error("[auth] signOut others:", erroOutras.message);
   return { ok: true };
 }

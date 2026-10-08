@@ -35,7 +35,8 @@ export async function signIn(email: string, senha: string): Promise<Resultado> {
   const s = segredo();
   const esperadoEmail = process.env.ADMIN_EMAIL;
   const esperadaSenha = process.env.ADMIN_PASSWORD;
-  if (!s || !esperadoEmail || !esperadaSenha) return { ok: false, erro: "Login não configurado neste ambiente." };
+  const esperado = await valorSessaoEsperado();
+  if (!s || !esperadoEmail || !esperadaSenha || !esperado) return { ok: false, erro: "Login não configurado neste ambiente." };
 
   const normal = email.trim().toLowerCase().slice(0, EMAIL_MAX);
   const rl = await rateLimit(`login:${await clientIp()}:${normal}`, LOGIN_LIMITE, LOGIN_JANELA_MS);
@@ -49,7 +50,7 @@ export async function signIn(email: string, senha: string): Promise<Resultado> {
   ]);
   if (!okEmail || !okSenha) return { ok: false, erro: "E-mail ou senha inválidos." };
 
-  (await cookies()).set(ADMIN_COOKIE, await signValue((await valorSessaoEsperado())!, s, ADMIN_TTL_MS), {
+  (await cookies()).set(ADMIN_COOKIE, await signValue(esperado, s, ADMIN_TTL_MS), {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
