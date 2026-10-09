@@ -17,7 +17,7 @@ projeto do cliente e diz o que trocar, o que não mexer e como alternar modos.
 ## O que não mexer sem a skill correspondente
 
 - `lib/csp.ts`, `next.config.ts` (headers) → `/seguranca`
-- `lib/auth/*`, `lib/proxy/*`, `proxy.ts` → `/auth-admin`
+- `lib/auth/*`, `lib/proxy/admin.ts` → `/auth-admin`; `lib/proxy/gate.ts`, `proxy.ts` (gate e noindex) → `/seguranca`
 - `supabase/*.sql` → `/seguranca` (rodar `004_hardening.sql` de novo depois de qualquer migration)
 
 ## Princípios

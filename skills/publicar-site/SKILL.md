@@ -28,6 +28,8 @@ mostrar como logar.
    a partir da fase 4, `/auditar-site`. Achado crítico → parar e corrigir antes.
 4. **Envs na Vercel:** conferir com `vercel env ls production` que existem todas as do `.env.example`
    que o modo exige. Remover `PREVIEW_PASSWORD` e `PREVIEW_SECRET` (`vercel env rm <NOME> production --yes`).
+   Conferir `NEXT_PUBLIC_SITE_URL`: remover ou trocar para `https://<dominio>` (senão canonical,
+   sitemap e robots continuam apontando para a prévia).
 5. **Manifesto:** `site.json` → `status: "online"`, `dominio` preenchido. Commit `chore: publica site`.
 6. **Domínio:**
    - `vercel domains add <dominio> <projeto>` e `vercel domains add www.<dominio> <projeto>`.

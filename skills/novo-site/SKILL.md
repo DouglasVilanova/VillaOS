@@ -43,6 +43,9 @@ e `vercel login`. Conta errada: parar e pedir ao usuário para logar na conta Vi
 Sem os CLIs o usuário pode seguir só com o projeto local; repo e deploy ficam para `/publicar-site`.
 
 Pasta dos clientes: `clientes/` na raiz do workspace (conferir no `CLAUDE.md` da raiz).
+Conferir que o `.gitignore` do workspace ignora `clientes/` (da raiz do workspace:
+`git check-ignore -q clientes/x`). Se não ignorar, adicionar `clientes/` ao `.gitignore` e avisar
+o usuário — evita um repositório aninhado dentro do repositório do workspace.
 
 ## Workflow — modo proposta
 
@@ -121,7 +124,8 @@ Pasta dos clientes: `clientes/` na raiz do workspace (conferir no `CLAUDE.md` da
 5. Aplicar `regras.md`; Supabase; envs (passos 6, 8, 9 do modo completo).
 6. Gate: manter `PREVIEW_PASSWORD`/`PREVIEW_SECRET` se o cliente quiser sigilo durante o
    desenvolvimento (o gate continua ativo fora de `online`); senão remover:
-   `vercel env rm PREVIEW_PASSWORD production --yes` e `vercel env rm PREVIEW_SECRET production --yes`.
+   `vercel env rm PREVIEW_PASSWORD production --yes` e `vercel env rm PREVIEW_SECRET production --yes`,
+   e apagar as linhas `PREVIEW_*` do `.env.local`.
 7. Validar (`npm ci`, `npm test`, `npm run build`) e enviar — o repo e o projeto Vercel já existem:
    ```powershell
    git add -A; git commit -m "feat: ativa projeto completo"; git push

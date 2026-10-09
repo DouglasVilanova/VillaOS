@@ -15,20 +15,24 @@ encaminhar para `/novo-site`.
 
 ## Tabela de roteamento
 
-A tabela vive no `CLAUDE.md` da raiz do workspace (seção "Criação de sites (VillaOS)"). Ler de lá;
-ela é atualizada a cada fase do VillaOS.
+Ler primeiro `<base>/roteamento.md` (`<base>` = pasta desta skill), depois as extensões no
+`CLAUDE.md` da raiz do workspace, se houver (em conflito, vale o do workspace). Skills marcadas
+como opcionais só são usadas se estiverem instaladas; se uma rota apontar para skill ausente,
+avisar o usuário e fazer a tarefa sem ela.
 
 ## Workflow
 
 1. **Cliente e contexto.** Identificar `clientes/<slug>`; ler `site.json`, `design-system.md`, `CLAUDE.md` do cliente.
 2. **Quebrar a demanda** em partes e mapear cada uma para uma linha da tabela. Mostrar ao usuário
    numa linha: "Aplicando `/x` + `/y`, auditor `z` no fim."
-3. **Funcionalidade nova?** (algo que o site ainda não faz) → `superpowers:brainstorming` antes.
-4. **Mais de uma skill?** → `superpowers:writing-plans`. Sem plano aprovado, não executar.
+3. **Funcionalidade nova?** (algo que o site ainda não faz) → brainstorm antes (skill `superpowers:brainstorming`, se estiver instalada; senão, fazer o
+   brainstorm direto na conversa).
+4. **Mais de uma skill?** → plano (skill `superpowers:writing-plans`, se estiver instalada; senão,
+   escrever o plano direto na conversa). Sem plano aprovado, não executar.
    Cada tarefa do plano nomeia a skill de referência: "seguir `<caminho>/SKILL.md`, seção X".
 5. **Executar** na ordem do plano:
    - passos com interação (briefing, escolha de modo, aprovação de diff, DNS) na conversa principal;
-   - tarefas de código independentes podem ir para subagentes (`superpowers:subagent-driven-development`):
+   - tarefas de código independentes podem ir para subagentes (skill `superpowers:subagent-driven-development`, se estiver instalada):
      o subagente lê o `SKILL.md` indicado como texto e segue a seção.
 6. **Auditar** o que mudou: todos os auditores aplicáveis, em paralelo. Na fase 1 só existe o
    `security-auditor`, chamado via `/seguranca` (modo verificar, `origem` = `orquestrar`), que grava
@@ -38,6 +42,8 @@ ela é atualizada a cada fase do VillaOS.
 8. **Entregar:** o que foi feito por skill, achados da auditoria, pendências.
 
 ## Desempate de rota
+
+As regras de desempate estão em `<base>/roteamento.md`. Em resumo:
 
 - "post" sem rede social e cliente com `blog` → blog; senão → `/carrossel`; na dúvida, perguntar.
 - "meta" sozinho → perguntar: meta tags (`/seo-tecnico`) ou Meta Ads (`/relatorio-ads`).

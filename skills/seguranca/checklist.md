@@ -5,7 +5,8 @@ Cada item: ID, severidade, quando se aplica, como verificar, como corrigir. O ag
 desta lista e seção "Riscos aceitos" do `CLAUDE.md` do cliente) não viram achado.
 
 Skill que corrige: `/auth-admin` para SEG-12, SEG-13, SEG-14, SEG-16, SEG-17; `/publicar-site`
-para SEG-40 a SEG-43; `/seguranca` para todos os outros.
+para SEG-40, SEG-41 e SEG-43; `/seguranca` para SEG-42 (gate e `noindex` no `proxy.ts`) e todos
+os outros.
 
 Severidades: **crítico** (bloqueia `online`), **alto**, **médio**, **baixo**.
 
@@ -13,7 +14,7 @@ Severidades: **crítico** (bloqueia `online`), **alto**, **médio**, **baixo**.
 
 | ID | Sev. | Aplica | Verificar | Corrigir |
 |---|---|---|---|---|
-| SEG-01 | crítico | sempre | `git ls-files` sem `.env*` (exceto `.env.example`); `git log --all --diff-filter=A --name-only` sem `.env`; `gitleaks detect --no-banner` só se `gitleaks` já estiver instalado (não instalar) | remover do índice, rotacionar a chave vazada, adicionar ao `.gitignore` |
+| SEG-01 | crítico | sempre | `git ls-files` com nenhum `.env*` além de `.env.example`; `git log --all --diff-filter=A --name-only` com nenhum `.env*` além de `.env.example`; `gitleaks detect --no-banner` só se `gitleaks` já estiver instalado (não instalar) | remover do índice, rotacionar a chave vazada, adicionar ao `.gitignore` |
 | SEG-02 | crítico | sempre | `SUPABASE_SERVICE_ROLE_KEY` e `SESSION_SECRET` nunca com prefixo `NEXT_PUBLIC_`; `SUPABASE_SERVICE_ROLE_KEY` lido só em `lib/supabase/admin.ts` e `lib/env.ts` (presença) | renomear env; mover uso para módulo com `import "server-only"` |
 | SEG-03 | alto | sempre | `npm audit --omit=dev` sem `critical`/`high` | `npm audit fix`; atualizar pacote |
 

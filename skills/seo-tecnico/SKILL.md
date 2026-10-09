@@ -6,7 +6,7 @@ description: >
   verificação do Google Search Console no HTML do servidor e redirects 301 do site antigo. Use
   quando o usuário disser "meta tags", "sitemap", "robots", "schema", "JSON-LD", "indexar",
   "Search Console", "redirect do site antigo", "og image" ou "/seo-tecnico". Para pesquisa de
-  palavras-chave, concorrência e conteúdo, usar /seo.
+  palavras-chave, concorrência e conteúdo, usar `/seo` (se estiver instalada).
 ---
 
 # /seo-tecnico — SEO no código

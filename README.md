@@ -172,6 +172,7 @@ TBT), com a correção da skill `/performance`.
 skills/      uma pasta por skill, com SKILL.md e arquivos de apoio
 agents/      um .md por agente
 docs/specs/  especificações de design
+scripts/     instalar.ps1 (instalação) e validar.mjs (validação das skills)
 ```
 
 ## Instalação
@@ -186,6 +187,10 @@ powershell -ExecutionPolicy Bypass -File scripts\instalar.ps1
 
 Instala em `~/.claude/skills` e `~/.claude/agents` (todas as sessões). Para instalar só num
 projeto: `-Destino <projeto>\.claude`. Abrir uma sessão nova do Claude Code depois de instalar.
+
+O instalador substitui a pasta de cada skill instalada: edições locais nelas se perdem (edite no repositório e reinstale).
+
+Algumas rotas do `/orquestrar` apontam para skills de marketing opcionais do workspace; sem elas, o roteamento avisa e segue.
 
 Para criar e publicar sites, a skill `novo-site` usa `gh` e `vercel` CLIs logados na conta da agência.
 
