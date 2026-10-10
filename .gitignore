@@ -8,3 +8,18 @@ Thumbs.db
 clientes/
 .auditoria/
 docs/plans/
+
+# Workspace privado (memória do negócio, marketing, skills de terceiros).
+# Fica na mesma pasta para uso local e NUNCA vai para este repositório público.
+_memoria/
+marketing/
+identidade/
+dados/
+saidas/
+templates/
+.claude/
+.agents/
+skills-lock.json
+CLAUDE.md
+docs/superpowers/
+*.tmp
